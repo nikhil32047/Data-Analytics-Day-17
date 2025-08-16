@@ -1,0 +1,74 @@
+Advanced SQL & Analytics Concepts:
+================================
+
+1. SQL Subqueries (Nested Queries):
+================================
+A subquery is a query inside another query.
+Useful when you need intermediate results before applying conditions.
+
+✅ Example:
+
+SELECT name, salary
+FROM employees
+WHERE salary > (SELECT AVG(salary) FROM employees);
+
+🔎 Finds employees earning more than the average salary
+
+
+2. SQL Window Functions (OVER, PARTITION BY, ROW_NUMBER):
+==================================================
+Window functions allow advanced analytics without collapsing rows.
+
+Examples: RANK(), ROW_NUMBER(), DENSE_RANK(), NTILE().
+
+✅ Example:
+
+SELECT name, department, salary,
+       RANK() OVER (PARTITION BY department ORDER BY salary DESC) AS dept_rank
+FROM employees;
+
+🔎 Gives ranking of employees within each department.
+
+
+3. SQL Case Statements (Conditional Logic):
+=======================================
+Adds if-else style logic in queries.
+
+✅ Example:
+
+SELECT name, salary,
+       CASE
+         WHEN salary > 80000 THEN 'High'
+         WHEN salary BETWEEN 50000 AND 80000 THEN 'Medium'
+         ELSE 'Low'
+       END AS salary_category
+FROM employees;
+
+🔎 Categorizes employees based on salary.
+
+
+4. SQL CTE (Common Table Expressions):
+==================================
+Temporary named result set (like a view, but scoped to a single query).
+Improves readability of complex queries.
+
+✅ Example:
+
+WITH DeptAvg AS (
+   SELECT department, AVG(salary) AS avg_salary
+   FROM employees
+   GROUP BY department
+)
+SELECT e.name, e.salary, d.avg_salary
+FROM employees e
+JOIN DeptAvg d
+  ON e.department = d.department;
+
+
+5. SQL Performance Optimization Tips:
+==================================
+Always use indexes on frequently filtered/joined columns.
+Avoid SELECT * (fetch only needed columns).
+Break complex queries into CTEs for readability.
+Use EXPLAIN PLAN to understand query performance.
+
